@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    /* A default sans-serif font */
+    background-color: #FFF0DB;
+    /* Approximate background color from the image */
+    color: #001F54;
+    /* Dark blue text color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
+.container {
+    max-width: 600px;
+    padding: 20px;
+}
+
+header h1 {
+    font-family: serif;
+    /* Using a serif font for the heading */
+    font-size: 2.8em;
+    /* Adjust size as needed */
+    margin-bottom: 0.5em;
+    color: #001F54;
+    /* Dark blue */
+}
+
+header h1 .sparkle {
+    color: #FFB800;
+    /* Gold color for the sparkle */
+}
+
+header p {
+    font-size: 1.1em;
+    color: #034078;
+    /* Slightly lighter blue */
+    margin-bottom: 3em;
+}
+
+.illustration-container {
+    margin: 2em auto;
+    /* Center the container */
+    max-width: 400px;
+    /* Set a max-width for the image container */
+    width: 80%;
+    /* Allow it to shrink on smaller screens */
+}
+
+.illustration-container img {
+    display: block;
+    /* Prevent extra space below image */
+    max-width: 100%;
+    /* Image scales down to fit container */
+    height: auto;
+    /* Maintain aspect ratio */
+    margin: 0 auto;
+    /* Center image if container is wider */
+}
+
+footer {
+    margin-top: 3em;
+}
+
+.cta-button {
+    background-color: #6B9EFF;
+    /* Blue button color */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    border-radius: 25px;
+    /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #4A7BDB;
+    /* Darker blue on hover */
+}
