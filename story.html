@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Cradle - Your Story</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            /* Removed default background color here, will set per section or default */
+            color: #333;
+            /* Default dark text color for lighter backgrounds */
+            overflow: hidden;
+            /* Prevent default body scroll */
+        }
+
+        .story-container {
+            height: 100vh;
+            width: 100%;
+            scroll-snap-type: y mandatory;
+            /* Enable vertical snap scrolling */
+            overflow-y: scroll;
+            /* Allow scrolling within the container */
+            scroll-behavior: smooth;
+            /* Smooth scrolling effect */
+            background-color: #0a0a1a;
+            /* Default background if sections don't override */
+        }
+
+        .story-section {
+            height: 100vh;
+            /* Each section takes full viewport height */
+            width: 100%;
+            /* Ensure section takes full width */
+            scroll-snap-align: start;
+            /* Snap to the start of each section */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            box-sizing: border-box;
+            position: relative;
+            /* Needed for absolute positioning of content/animations */
+            /* border-bottom: 1px dashed rgba(255, 255, 255, 0.2); /* Optional separator - might remove depending on design */
+            opacity: 0;
+            /* Start sections as invisible for animation */
+            transform: translateY(50px);
+            /* Start sections slightly lower for animation */
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            /* Animation transition */
+            overflow: hidden;
+            /* Hide overflow from animations or large elements */
+        }
+
+        /* Animation class to be added by JS when section is in view */
+        .story-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Placeholder styling for content within sections */
+        /* These might be overridden by specific section styles */
+        .story-section h2 {
+            font-size: 2.8em;
+            /* Adjusted size */
+            margin-bottom: 15px;
+            /* Adjusted spacing */
+            font-weight: bold;
+        }
+
+        .story-section p {
+            font-size: 1.4em;
+            /* Adjusted size */
+            max-width: 800px;
+            /* Limit text width */
+            line-height: 1.6;
+            margin-top: 0;
+        }
+
+        /* Remove Parallax Background for now, apply section-specific backgrounds */
+        /* .parallax-bg { ... } */
+
+        /* --- Section 1 Specific Styles --- */
+        #section1 {
+            background: linear-gradient(to bottom, #FFF0DB, #FFDAB9);
+            /* Cream to Peach gradient */
+            color: #4a4a4a;
+            /* Darker text color for light background */
+            justify-content: space-around;
+            /* Adjust vertical spacing */
+        }
+
+        #section1 h2 {
+            margin-top: 5vh;
+            /* Push header down a bit */
+            font-size: 3em;
+        }
+
+        #section1 .subtext {
+            font-size: 1.5em;
+            margin-bottom: 5vh;
+        }
+
+        .cradle {
+            width: 350px;
+            /* Adjust size as needed */
+            max-width: 80%;
+            height: auto;
+            margin-bottom: 5vh;
+            /* Space below cradle */
+            animation: gentle-rock 4s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        @keyframes gentle-rock {
+
+            0%,
+            100% {
+                transform: rotate(-2deg);
+            }
+
+            50% {
+                transform: rotate(2deg);
+            }
+        }
+
+        /* Sparkles - Example Implementation */
+        .sparkle {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-image: url('sparkle.png');
+            /* Replace with actual sparkle image */
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation: shimmer 2s ease-in-out infinite alternate;
+        }
+
+        /* Position individual sparkles (add more as needed) */
+        .sparkle.s1 {
+            top: 15%;
+            left: 20%;
+            animation-delay: 0.2s;
+            width: 12px;
+            height: 12px;
+        }
+
+        .sparkle.s2 {
+            top: 30%;
+            left: 80%;
+            animation-delay: 0.5s;
+            width: 18px;
+            height: 18px;
+        }
+
+        .sparkle.s3 {
+            top: 70%;
+            left: 10%;
+            animation-delay: 0.8s;
+        }
+
+        .sparkle.s4 {
+            top: 85%;
+            left: 60%;
+            animation-delay: 1.1s;
+            width: 10px;
+            height: 10px;
+        }
+
+        .sparkle.s5 {
+            top: 40%;
+            left: 30%;
+            animation-delay: 1.4s;
+        }
+
+        @keyframes shimmer {
+            from {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 0.9;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Constellations - Example (could be background or SVGs) */
+        .constellation {
+            position: absolute;
+            width: 100px;
+            /* Adjust */
+            height: auto;
+            opacity: 0.5;
+        }
+
+        .constellation.c1 {
+            top: 25%;
+            right: 15%;
+            width: 80px;
+        }
+
+        .constellation.c2 {
+            bottom: 15%;
+            left: 25%;
+            width: 120px;
+            transform: rotate(15deg);
+        }
+
+        /* Scroll Cue */
+        .scroll-cue {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+            cursor: pointer;
+            /* Indicate it might be clickable (though it just cues) */
+        }
+
+        .scroll-cue span {
+            display: block;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            color: rgba(74, 74, 74, 0.8);
+        }
+
+        .scroll-cue img {
+            width: 30px;
+            /* Adjust size */
+            height: auto;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Ensure section 1 is visible immediately */
+        #section1 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Section 2 Specific Styles --- */
+        #section2 {
+            /* Slightly warmer gradient: Peach to Soft Orange/Pink */
+            background: linear-gradient(to bottom, #FFDAB9, #FFB6C1);
+            /* Peach to Light Pink */
+            color: #4a4a4a;
+            /* Maintain dark text color */
+            justify-content: space-evenly;
+            /* Distribute content vertically */
+            align-items: center;
+            padding-top: 8vh;
+            /* Add padding to make space for the title */
+            padding-bottom: 5vh;
+        }
+
+        #section2 .section-title {
+            font-size: 2.8em;
+            font-weight: bold;
+            margin-bottom: 4vh;
+            /* Space below title */
+            opacity: 0;
+            /* Animation */
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            /* No delay, title appears first */
+        }
+
+        #section2.visible .section-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .zodiac-info {
+            display: flex;
+            justify-content: space-around;
+            /* Space out signs */
+            align-items: flex-start;
+            /* Align items to the top */
+            width: 80%;
+            /* Control the spread */
+            max-width: 1000px;
+            margin-bottom: 5vh;
+            /* Space before action tip */
+        }
+
+        .sign {
+            text-align: center;
+            opacity: 0;
+            /* Start hidden for animation */
+            transform: translateY(30px);
+            /* Start lower for animation */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            width: 30%;
+            /* Approx width for each sign */
+        }
+
+        /* Sequential Animation Delays */
+        #section2.visible .sign:nth-child(1) {
+            transition-delay: 0.4s;
+            /* Slightly delay signs after title */
+        }
+
+        #section2.visible .sign:nth-child(2) {
+            transition-delay: 0.7s;
+        }
+
+        #section2.visible .sign:nth-child(3) {
+            transition-delay: 1.0s;
+        }
+
+        /* Apply animation when section is visible */
+        #section2.visible .sign {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sign .icon {
+            font-size: 3em;
+            /* Icon size */
+            margin-bottom: 10px;
+            display: block;
+            /* Ensure margin works */
+        }
+
+        .sign h3 {
+            font-size: 1.6em;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .sign p {
+            font-size: 1.1em;
+            line-height: 1.5;
+            max-width: 250px;
+            /* Limit width of description */
+            margin: 0 auto;
+            /* Center description text block */
+        }
+
+        /* Action Tip Box */
+        .action-tip {
+            background-color: rgba(255, 255, 255, 0.5);
+            /* Semi-transparent white */
+            border: 1px solid rgba(74, 74, 74, 0.2);
+            border-radius: 10px;
+            padding: 20px 30px;
+            max-width: 600px;
+            width: 70%;
+            font-size: 1.1em;
+            line-height: 1.6;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            /* Animation for the box itself */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out 1.4s, transform 1s ease-out 1.4s;
+            /* Delay after last sign */
+        }
+
+        #section2.visible .action-tip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Static Sparkles near signs (Example) */
+        /* Re-using sparkle class from section 1, but positioning differently */
+        #section2 .sparkle {
+            animation: none;
+            /* Disable section 1 animation if needed */
+            opacity: 0.7;
+            /* Static opacity */
+            /* position specific sparkles */
+        }
+
+        #section2 .s6 {
+            top: 20%;
+            left: 30%;
+            width: 10px;
+            height: 10px;
+        }
+
+        #section2 .s7 {
+            top: 25%;
+            left: 65%;
+            width: 12px;
+            height: 12px;
+        }
+
+        #section2 .s8 {
+            top: 40%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+        }
+
+        /* --- Section 3 Specific Styles --- */
+        #section3 {
+            /* Gradient: Light Pink to Soft Yellow/Cream */
+            background: linear-gradient(to bottom, #FFB6C1, #FFFACD);
+            /* Light Pink to Lemon Chiffon */
+            color: #5a4a4a;
+            /* Slightly darker text for contrast */
+            justify-content: flex-start;
+            /* Align content towards the top */
+            padding-top: 10vh;
+            position: relative;
+            /* Needed for absolute confetti */
+            overflow: hidden;
+            /* Contain confetti */
+        }
+
+        #section3 .section-title {
+            font-size: 2.8em;
+            font-weight: bold;
+            margin-bottom: 5vh;
+            /* Animation handled by general .story-section.visible */
+        }
+
+        .milestones-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            width: 85%;
+            max-width: 1100px;
+            gap: 40px;
+            /* Space between columns */
+            margin-bottom: 5vh;
+        }
+
+        .milestone-item {
+            flex: 1;
+            /* Each item takes equal space */
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        /* Slide-in Animations */
+        .milestone-item.left {
+            transform: translateX(-50px);
+        }
+
+        .milestone-item.right {
+            transform: translateX(50px);
+        }
+
+        #section3.visible .milestone-item.left {
+            opacity: 1;
+            transform: translateX(0);
+            transition-delay: 0.3s;
+            /* Stagger animation */
+        }
+
+        #section3.visible .milestone-item.right {
+            opacity: 1;
+            transform: translateX(0);
+            transition-delay: 0.6s;
+            /* Stagger animation */
+        }
+
+        .milestone-item .icon {
+            font-size: 4em;
+            /* Larger icon */
+            margin-bottom: 15px;
+            display: block;
+            /* Add specific image styling if using <img> instead of emoji */
+            /* Example: width: 100px; height: auto; */
+        }
+
+        .milestone-item h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .milestone-item p {
+            font-size: 1.05em;
+            line-height: 1.6;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .fun-fact {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 700px;
+            width: 80%;
+            text-align: center;
+            margin-top: 3vh;
+            font-size: 1.2em;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out 1s, transform 1s ease-out 1s;
+            /* Delayed fade-in */
+        }
+
+        #section3.visible .fun-fact {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fun-fact .icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        /* CSS Confetti */
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 15px;
+            background-color: #f0a;
+            top: -20px;
+            /* Start above screen */
+            opacity: 0;
+            z-index: 100;
+            /* Above other content */
+        }
+
+        #section3.visible .confetti-piece {
+            animation: drop 4s ease-out forwards;
+        }
+
+        @keyframes drop {
+            0% {
+                transform: translateY(0) rotateZ(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+                /* Become visible */
+            }
+
+            100% {
+                transform: translateY(110vh) rotateZ(360deg);
+                /* Fall down */
+                opacity: 0;
+                /* Fade out at the bottom */
+            }
+        }
+
+        /* Different colors and positions for confetti */
+        .confetti-piece:nth-child(1) {
+            left: 10%;
+            background-color: #ffcc00;
+            animation-delay: 0.2s;
+            width: 6px;
+            height: 12px;
+        }
+
+        .confetti-piece:nth-child(2) {
+            left: 20%;
+            background-color: #66ccff;
+            animation-delay: 0.5s;
+        }
+
+        .confetti-piece:nth-child(3) {
+            left: 30%;
+            background-color: #ff6666;
+            animation-delay: 0.3s;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .confetti-piece:nth-child(4) {
+            left: 40%;
+            background-color: #99ff99;
+            animation-delay: 0.7s;
+        }
+
+        .confetti-piece:nth-child(5) {
+            left: 50%;
+            background-color: #ff99cc;
+            animation-delay: 0.4s;
+            width: 7px;
+            height: 14px;
+        }
+
+        .confetti-piece:nth-child(6) {
+            left: 60%;
+            background-color: #ffcc66;
+            animation-delay: 0.6s;
+        }
+
+        .confetti-piece:nth-child(7) {
+            left: 70%;
+            background-color: #cc99ff;
+            animation-delay: 0.8s;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+        }
+
+        .confetti-piece:nth-child(8) {
+            left: 80%;
+            background-color: #66ffcc;
+            animation-delay: 0.5s;
+        }
+
+        .confetti-piece:nth-child(9) {
+            left: 90%;
+            background-color: #ff6699;
+            animation-delay: 0.3s;
+        }
+
+        .confetti-piece:nth-child(10) {
+            left: 5%;
+            background-color: #ffff99;
+            animation-delay: 0.9s;
+        }
+
+        /* --- Section 4 Specific Styles --- */
+        #section4 {
+            /* Pastel Sky Blue */
+            background: linear-gradient(to bottom, #E0F7FA, #B3E5FC);
+            /* Light Cyan to Light Blue */
+            color: #1A237E;
+            /* Dark Indigo text */
+            justify-content: space-evenly;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #section4 .section-title {
+            font-size: 2.8em;
+            font-weight: bold;
+            margin-bottom: 4vh;
+            color: #0D47A1;
+            /* Darker blue */
+            /* Animation handled by general .story-section.visible */
+        }
+
+        .number-display {
+            position: relative;
+            width: 300px;
+            /* Adjust size as needed */
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 4vh;
+            /* Animation for the container */
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 1s ease-out 0.3s, transform 1s ease-out 0.3s;
+        }
+
+        #section4.visible .number-display {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .central-number {
+            font-size: 10em;
+            /* Very large central number */
+            font-weight: bold;
+            color: #42A5F5;
+            /* Medium Blue */
+            background-color: rgba(255, 255, 255, 0.3);
+            /* Soft white circle bg */
+            border-radius: 50%;
+            width: 200px;
+            /* Circle size */
+            height: 200px;
+            line-height: 200px;
+            /* Vertically center */
+            text-align: center;
+            position: relative;
+            /* For stacking context */
+            z-index: 2;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px #81D4FA;
+            /* Inner/Outer glow */
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px #81D4FA;
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(255, 255, 255, 0.7), 0 0 50px #4FC3F7;
+            }
+        }
+
+        .orbiting-numbers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            animation: orbit 25s linear infinite;
+            /* Slow rotation */
+            z-index: 1;
+        }
+
+        @keyframes orbit {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .orbiting-number {
+            position: absolute;
+            font-size: 2.5em;
+            color: #1976D2;
+            /* Slightly darker blue */
+            font-weight: bold;
+            /* Position numbers around the circle */
+            /* Calculation: transform: translate(-50%, -50%) rotate(OrbitRotation) translateY(-Radius) rotate(-OrbitRotation); */
+        }
+
+        .orbiting-number.n1 {
+            top: 50%;
+            left: 0%;
+            transform: translate(-50%, -50%) translateY(-130px);
+        }
+
+        /* Top */
+        .orbiting-number.n2 {
+            top: 15%;
+            left: 15%;
+            transform: translate(-50%, -50%) translateY(-130px) rotate(45deg);
+        }
+
+        /* Top-Left */
+        .orbiting-number.n4 {
+            top: 15%;
+            left: 85%;
+            transform: translate(-50%, -50%) translateY(-130px) rotate(-45deg);
+        }
+
+        /* Top-Right */
+        .orbiting-number.n6 {
+            top: 85%;
+            left: 85%;
+            transform: translate(-50%, -50%) translateY(-130px) rotate(-135deg);
+        }
+
+        /* Bottom-Right */
+        /* Note: Positioning these perfectly in CSS can be tricky; adjust values as needed */
+
+        .personality-desc {
+            font-size: 1.4em;
+            max-width: 600px;
+            margin-bottom: 4vh;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out 0.8s, transform 1s ease-out 0.8s;
+            /* Delayed fade-in */
+        }
+
+        #section4.visible .personality-desc {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #section4 .action-tip {
+            /* Reuse action-tip style, adjust background/color if needed */
+            background-color: rgba(255, 255, 255, 0.6);
+            border-color: rgba(13, 71, 161, 0.3);
+            color: #0D47A1;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out 1.2s, transform 1s ease-out 1.2s;
+            /* Delayed fade-in */
+        }
+
+        #section4.visible .action-tip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Section 5 Specific Styles --- */
+        #section5 {
+            background: #FAF0E6;
+            /* Linen/Cream background */
+            color: #5D4037;
+            /* Brown text */
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #section5 .section-title {
+            font-size: 2.8em;
+            font-weight: bold;
+            margin-bottom: 6vh;
+            color: #4E342E;
+            /* Darker Brown */
+            /* Animation handled by general .story-section.visible */
+        }
+
+        .checklist-container {
+            background-color: rgba(255, 255, 255, 0.6);
+            /* Slightly transparent white */
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            width: 70%;
+            max-width: 700px;
+            position: relative;
+            /* For sparkle trail positioning */
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 1.3em;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .checklist-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Staggered animation for items */
+        #section5.visible .checklist-item:nth-child(1) {
+            transition-delay: 0.3s;
+        }
+
+        #section5.visible .checklist-item:nth-child(2) {
+            transition-delay: 0.6s;
+        }
+
+        #section5.visible .checklist-item:nth-child(3) {
+            transition-delay: 0.9s;
+        }
+
+        #section5.visible .checklist-item {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .checkmark {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            margin-right: 15px;
+            border: 2px solid #4CAF50;
+            /* Green */
+            border-radius: 50%;
+            position: relative;
+            transform: scale(0);
+            /* Start hidden */
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            /* Bounce effect */
+        }
+
+        #section5.visible .checklist-item:nth-child(1) .checkmark {
+            transition-delay: 0.5s;
+        }
+
+        #section5.visible .checklist-item:nth-child(2) .checkmark {
+            transition-delay: 0.8s;
+        }
+
+        #section5.visible .checklist-item:nth-child(3) .checkmark {
+            transition-delay: 1.1s;
+        }
+
+        #section5.visible .checkmark {
+            transform: scale(1);
+        }
+
+        /* Simple checkmark symbol inside the circle */
+        .checkmark::after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 3px;
+            width: 7px;
+            height: 12px;
+            border: solid #4CAF50;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+
+        .checklist-item .item-icon {
+            margin-left: auto;
+            /* Push icon to the right */
+            font-size: 1.8em;
+            /* Icon size */
+            padding-left: 15px;
+            /* Space between text and icon */
+        }
+
+        /* Sparkle Trail Simulation */
+        #section5 .sparkle {
+            position: absolute;
+            background-image: url('sparkle.png');
+            /* Use sparkle image */
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation: trail-sparkle 0.8s ease-out forwards;
+            z-index: 5;
+            /* Below checklist items potentially */
+            width: 15px;
+            height: 15px;
+        }
+
+        @keyframes trail-sparkle {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+        }
+
+        /* Position sparkles along the checklist path with delays */
+        #section5.visible .sparkle.t1 {
+            top: 15%;
+            left: -10px;
+            animation-delay: 0.4s;
+        }
+
+        #section5.visible .sparkle.t2 {
+            top: 30%;
+            left: 10%;
+            animation-delay: 0.7s;
+            width: 10px;
+            height: 10px;
+        }
+
+        #section5.visible .sparkle.t3 {
+            top: 45%;
+            left: -5px;
+            animation-delay: 1.0s;
+        }
+
+        #section5.visible .sparkle.t4 {
+            top: 60%;
+            left: 5%;
+            animation-delay: 1.3s;
+            width: 12px;
+            height: 12px;
+        }
+
+        #section5.visible .sparkle.t5 {
+            top: 75%;
+            left: -15px;
+            animation-delay: 1.6s;
+        }
+
+        /* --- Section 6 Specific Styles --- */
+        #section6 {
+            /* Gradient: Peach to Pastel Lavender */
+            background: linear-gradient(to bottom, #FFDAB9, #E6E6FA);
+            /* Peach to Lavender */
+            color: #483D8B;
+            /* Dark Slate Blue text */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .baby-illustration {
+            width: 180px;
+            /* Adjust size */
+            height: auto;
+            margin-bottom: 4vh;
+            position: relative;
+            /* For potential orbiting stars around it */
+            z-index: 5;
+            /* Animation */
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 1s ease-out 0.2s, transform 1s ease-out 0.2s;
+        }
+
+        #section6.visible .baby-illustration {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Optional: add orbiting stars specifically around baby */
+
+        #section6 .section-title {
+            font-size: 2.5em;
+            /* Adjust size as needed */
+            font-weight: bold;
+            max-width: 600px;
+            line-height: 1.4;
+            margin: 0 auto 4vh auto;
+            /* Center and add bottom margin */
+            color: #3A2E6C;
+            /* Darker purple/blue */
+            /* Animation */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out 0.5s, transform 1s ease-out 0.5s;
+        }
+
+        #section6.visible .section-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message-box {
+            width: 80%;
+            max-width: 500px;
+            height: 100px;
+            /* Adjust height */
+            margin-bottom: 4vh;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(72, 61, 139, 0.3);
+            /* Light border */
+            background-color: rgba(255, 255, 255, 0.7);
+            /* Semi-transparent white */
+            font-size: 1.1em;
+            color: #483D8B;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            resize: none;
+            /* Prevent resizing */
+            /* Animation */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out 0.8s, transform 1s ease-out 0.8s;
+        }
+
+        #section6.visible .message-box {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            /* Space between buttons */
+            /* Animation */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out 1.1s, transform 1s ease-out 1.1s;
+        }
+
+        #section6.visible .cta-buttons {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cta-button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: #fff;
+            /* White background */
+            color: #483D8B;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(72, 61, 139, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            /* Space between icon and text */
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(72, 61, 139, 0.3);
+        }
+
+        .cta-button .icon {
+            /* Style for emoji icons in buttons */
+            font-size: 1.2em;
+        }
+
+        /* Confetti Burst */
+        #section6 .confetti-piece {
+            /* Reuse confetti styles from section 3, adjust animation maybe */
+            animation: burst 1.5s ease-out forwards;
+            /* Ensure high z-index */
+            z-index: 100;
+        }
+
+        @keyframes burst {
+            0% {
+                transform: translateY(50%) rotateZ(0) scale(0.5);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+                transform: translateY(-20%) rotateZ(180deg) scale(1.2);
+            }
+
+            100% {
+                /* Fly further out */
+                transform: translateY(-150vh) rotateZ(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Adjust position and delays for burst effect */
+        #section6.visible .confetti-piece:nth-child(1) {
+            left: 50%;
+            top: 50%;
+            animation-delay: 0.1s;
+            background-color: #ffcc00;
+        }
+
+        #section6.visible .confetti-piece:nth-child(2) {
+            left: 45%;
+            top: 55%;
+            animation-delay: 0.15s;
+            background-color: #66ccff;
+        }
+
+        #section6.visible .confetti-piece:nth-child(3) {
+            left: 55%;
+            top: 45%;
+            animation-delay: 0.2s;
+            background-color: #ff6666;
+        }
+
+        #section6.visible .confetti-piece:nth-child(4) {
+            left: 40%;
+            top: 40%;
+            animation-delay: 0.25s;
+            background-color: #99ff99;
+        }
+
+        #section6.visible .confetti-piece:nth-child(5) {
+            left: 60%;
+            top: 60%;
+            animation-delay: 0.1s;
+            background-color: #ff99cc;
+        }
+
+        #section6.visible .confetti-piece:nth-child(6) {
+            left: 50%;
+            top: 40%;
+            animation-delay: 0.15s;
+            background-color: #ffcc66;
+        }
+
+        #section6.visible .confetti-piece:nth-child(7) {
+            left: 60%;
+            top: 50%;
+            animation-delay: 0.2s;
+            background-color: #cc99ff;
+        }
+
+        #section6.visible .confetti-piece:nth-child(8) {
+            left: 40%;
+            top: 50%;
+            animation-delay: 0.25s;
+            background-color: #66ffcc;
+        }
+
+        /* Add more for denser burst */
+
+        /* Floating Stars */
+        #section6 .sparkle {
+            position: absolute;
+            background-image: url('sparkle.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+            animation: float 10s ease-in-out infinite alternate;
+            z-index: 1;
+            /* Behind content */
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(0px) translateX(0px) scale(0.8) rotate(0deg);
+                opacity: 0.4;
+            }
+
+            to {
+                transform: translateY(-20px) translateX(10px) scale(1.1) rotate(15deg);
+                opacity: 0.8;
+            }
+        }
+
+        /* Position floating stars */
+        #section6 .sparkle.f1 {
+            top: 10%;
+            left: 15%;
+            width: 15px;
+            height: 15px;
+            animation-duration: 12s;
+        }
+
+        #section6 .sparkle.f2 {
+            top: 25%;
+            left: 80%;
+            width: 10px;
+            height: 10px;
+            animation-duration: 8s;
+            animation-delay: 1s;
+        }
+
+        #section6 .sparkle.f3 {
+            top: 70%;
+            left: 10%;
+            width: 18px;
+            height: 18px;
+            animation-duration: 15s;
+            animation-delay: 0.5s;
+        }
+
+        #section6 .sparkle.f4 {
+            top: 85%;
+            left: 70%;
+            width: 12px;
+            height: 12px;
+            animation-duration: 10s;
+            animation-delay: 2s;
+        }
+
+        #section6 .sparkle.f5 {
+            top: 50%;
+            left: 50%;
+            width: 14px;
+            height: 14px;
+            animation-duration: 9s;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Removed parallax-bg div, handling backgrounds per section -->
+
+    <div class="story-container">
+        <!-- Section 1: Intro -->
+        <section class="story-section" id="section1">
+            <!-- Sparkles -->
+            <div class="sparkle s1"></div>
+            <div class="sparkle s2"></div>
+            <div class="sparkle s3"></div>
+            <div class="sparkle s4"></div>
+            <div class="sparkle s5"></div>
+
+            <!-- Constellations (Placeholders) -->
+            <!-- <img src="constellation1.svg" alt="Constellation" class="constellation c1">
+            <img src="constellation2.svg" alt="Constellation" class="constellation c2"> -->
+
+            <header>
+                <h2>Hello, proud parents of <span id="baby-name">Baby</span>! &#11088;</h2>
+                <p class="subtext">Let's uncover the magical story written in the stars.</p>
+            </header>
+
+            <img src="cradle.png" alt="Baby Cradle" class="cradle">
+
+            <div class="scroll-cue">
+                <span>Scroll to begin</span>
+                <img src="down-arrow.svg" alt="Scroll down">
+            </div>
+        </section>
+
+        <!-- Section 2: Zodiac Info -->
+        <section class="story-section" id="section2">
+            <!-- Static Sparkles for Section 2 -->
+            <div class="sparkle s6"></div>
+            <div class="sparkle s7"></div>
+            <div class="sparkle s8"></div>
+
+            <h2 class="section-title"><span id="baby-name-s2">Mohit</span>'s Cosmic Blueprint ✨</h2>
+
+            <div class="zodiac-info">
+                <div class="sign">
+                    <span class="icon">🌞</span>
+                    <h3>Sun: Aquarius</h3>
+                    <p>Forward-thinking and inventive!</p>
+                </div>
+                <div class="sign">
+                    <span class="icon">🌙</span>
+                    <h3>Moon: Aries</h3>
+                    <p>Emotionally bold and energetic.</p>
+                </div>
+                <div class="sign">
+                    <span class="icon">⬆️</span>
+                    <h3>Rising: Gemini</h3>
+                    <p>Communicative and curious!</p>
+                </div>
+            </div>
+
+            <div class="action-tip">
+                Nurture Mohit's endless curiosity with stories and hands-on exploration!
+            </div>
+        </section>
+
+        <!-- Section 3: Milestones -->
+        <section class="story-section" id="section3">
+            <!-- Confetti Pieces -->
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+
+            <h2 class="section-title">Born on a day of milestones 📜</h2>
+
+            <div class="milestones-container">
+                <div class="milestone-item left">
+                    <span class="icon">🏺</span> <!-- Replace with img if needed -->
+                    <h3>KV5 Tomb Discovery (Egypt, 1995)</h3>
+                    <p>On this day, archaeologists unearthed the largest tomb in the Valley of the Kings. Like these
+                        explorers, <span class="baby-name-s3">Mohit</span> will carry a natural instinct to dig deep and
+                        uncover hidden truths!</p>
+                </div>
+                <div class="milestone-item right">
+                    <span class="icon">🏏</span> <!-- Replace with img if needed -->
+                    <h3>Zimbabwe's First Cricket Victory (1995)</h3>
+                    <p>Persistence paid off! Zimbabwe celebrated its first Test cricket victory, showing the power of
+                        resilience — a trait <span class="baby-name-s3">Mohit</span> will embody in his journey.</p>
+                </div>
+            </div>
+
+            <div class="fun-fact">
+                <span class="icon">🧩</span>
+                <p>The day <span class="baby-name-s3">Mohit</span> was born was marked by milestones in discovery and
+                    triumph — hints of a future filled with curiosity and achievements.</p>
+            </div>
+        </section>
+
+        <!-- Section 4: Number Magic -->
+        <section class="story-section" id="section4">
+            <h2 class="section-title"><span id="baby-name-s4">Mohit</span>'s Number Magic 🔢</h2>
+
+            <div class="number-display">
+                <div class="central-number">3</div>
+                <div class="orbiting-numbers">
+                    <span class="orbiting-number n1">1</span>
+                    <span class="orbiting-number n2">2</span>
+                    <span class="orbiting-number n4">4</span>
+                    <span class="orbiting-number n6">6</span>
+                </div>
+            </div>
+
+            <p class="personality-desc">
+                Creative communicator, expressive and charismatic.
+            </p>
+
+            <div class="action-tip">
+                Encourage creative hobbies like writing, art, or public speaking!
+            </div>
+        </section>
+
+        <!-- Section 5: Guide -->
+        <section class="story-section" id="section5">
+            <h2 class="section-title">Guide for <span id="baby-name-s5">Mohit</span>'s Bright Journey 🧩</h2>
+
+            <div class="checklist-container">
+                <!-- Sparkles for Trail Effect -->
+                <div class="sparkle t1"></div>
+                <div class="sparkle t2"></div>
+                <div class="sparkle t3"></div>
+                <div class="sparkle t4"></div>
+                <div class="sparkle t5"></div>
+
+                <div class="checklist-item">
+                    <span class="checkmark"></span>
+                    <span>Keep puzzles and brain teasers handy!</span>
+                    <span class="item-icon">🧩</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="checkmark"></span>
+                    <span>Encourage group activities — <span class="baby-name-s5">Mohit</span>'s charm will
+                        shine!</span>
+                    <span class="item-icon">👥</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="checkmark"></span>
+                    <span>Celebrate every small discovery to fuel curiosity.</span>
+                    <span class="item-icon">🔎</span>
+                </div>
+            </div>
+
+            <!-- Optional: Add a concluding remark or button here -->
+
+        </section>
+
+        <!-- Section 6: Conclusion & CTA -->
+        <section class="story-section" id="section6">
+            <!-- Floating Stars -->
+            <div class="sparkle f1"></div>
+            <div class="sparkle f2"></div>
+            <div class="sparkle f3"></div>
+            <div class="sparkle f4"></div>
+            <div class="sparkle f5"></div>
+
+            <!-- Confetti Burst Elements -->
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+            <div class="confetti-piece"></div>
+
+            <img src="sitting_smiling_baby.png" alt="Smiling Baby" class="baby-illustration">
+
+            <h2 class="section-title">Your little star's journey is just beginning 🌈</h2>
+
+            <textarea id="message-to-baby" class="message-box" placeholder="Write a message to Mohit!"></textarea>
+
+            <div class="cta-buttons">
+                <button class="cta-button" id="download-pdf">
+                    <span class="icon">📩</span> Download PDF
+                </button>
+                <button class="cta-button" id="share-story">
+                    <span class="icon">🔗</span> Share Story
+                </button>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Dynamic Baby Name Insertion
+            const babyNameSpan = document.getElementById('baby-name');
+            const storedName = sessionStorage.getItem('characterName'); // Get name from session storage
+            if (babyNameSpan && storedName) {
+                babyNameSpan.textContent = storedName;
+            } else if (babyNameSpan) {
+                babyNameSpan.textContent = 'Mohit'; // Fallback name
+            }
+            // Update name in section 2 as well
+            const babyNameSpanS2 = document.getElementById('baby-name-s2');
+            if (babyNameSpanS2 && storedName) {
+                babyNameSpanS2.textContent = storedName;
+            } else if (babyNameSpanS2) {
+                babyNameSpanS2.textContent = 'Mohit'; // Fallback
+            }
+            // Update name in section 3 (multiple places)
+            const babyNameSpansS3 = document.querySelectorAll('.baby-name-s3');
+            babyNameSpansS3.forEach(span => {
+                if (storedName) {
+                    span.textContent = storedName;
+                } else {
+                    span.textContent = 'Mohit'; // Fallback
+                }
+            });
+
+            // Section Visibility Observer
+            const sections = document.querySelectorAll('.story-section:not(#section1)'); // Observe all sections except the first one
+            const container = document.querySelector('.story-container');
+
+            const observerOptions = {
+                root: container, // Observe intersections within the container
+                rootMargin: '0px',
+                threshold: 0.4 // Trigger when 40% of the section is visible (adjust as needed)
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        // Optional: Remove 'visible' class if you want animations to replay when scrolling back up
+                        // entry.target.classList.remove('visible');
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Make section 1 visible immediately without observing
+            // (Handled by removing it from the `sections` querySelectorAll and adding specific CSS)
+
+            // --- Parallax --- 
+            // Basic CSS parallax with background-attachment: fixed is often not smooth with scroll-snapping.
+            // A JS-based approach is better for smooth parallax on scroll-snap containers.
+            // We can add that later if needed. For now, section backgrounds are static.
+
+            // Update name in section 4
+            const babyNameSpanS4 = document.getElementById('baby-name-s4');
+            if (babyNameSpanS4 && storedName) {
+                babyNameSpanS4.textContent = storedName;
+            } else if (babyNameSpanS4) {
+                babyNameSpanS4.textContent = 'Mohit'; // Fallback
+            }
+            // Update name in section 5 (multiple places)
+            const babyNameSpansS5 = document.querySelectorAll('.baby-name-s5');
+            babyNameSpansS5.forEach(span => {
+                if (storedName) {
+                    span.textContent = storedName;
+                } else {
+                    span.textContent = 'Mohit'; // Fallback
+                }
+            });
+
+            // Update placeholder in section 6
+            const messageBox = document.getElementById('message-to-baby');
+            if (messageBox) {
+                if (storedName) {
+                    messageBox.placeholder = `Write a message to ${storedName}!`;
+                } else {
+                    messageBox.placeholder = 'Write a message to Mohit!'; // Fallback
+                }
+            }
+
+            // Optional: Add event listeners for buttons
+            const downloadBtn = document.getElementById('download-pdf');
+            const shareBtn = document.getElementById('share-story');
+
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', () => {
+                    console.log('Download PDF clicked');
+                    // Add PDF generation logic here
+                    alert('PDF download functionality not implemented yet.');
+                });
+            }
+
+            if (shareBtn) {
+                shareBtn.addEventListener('click', () => {
+                    console.log('Share Story clicked');
+                    // Add sharing logic here (e.g., using Web Share API)
+                    if (navigator.share) {
+                        navigator.share({
+                            title: `Mohit's Cosmic Story`,
+                            text: 'Discover the magical story written in the stars for Mohit!',
+                            url: window.location.href // Share current page URL
+                        }).then(() => console.log('Successful share'))
+                            .catch((error) => console.log('Error sharing', error));
+                    } else {
+                        alert('Web Share API not supported in your browser. Functionality not implemented yet.');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

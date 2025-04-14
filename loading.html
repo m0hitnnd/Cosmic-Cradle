@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Cradle - Generating Story</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Add specific styles for loading page here or in style.css */
+        body {
+            margin: 0;
+            /* Remove default body margin */
+            font-family: 'Arial', sans-serif;
+            /* Example font, ensure it matches design */
+        }
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            /* Adjust vertical distribution */
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+            /* Add some padding */
+            box-sizing: border-box;
+            /* Subtle gradient background */
+            background: #FFF0DB;
+            /* Pinkish top to yellowish bottom */
+        }
+
+        .loading-dots {
+            margin-top: 20px;
+            /* Add space above dots */
+        }
+
+        .loading-dots span {
+            display: inline-block;
+            width: 12px;
+            /* Slightly larger dots */
+            height: 12px;
+            margin: 0 8px;
+            /* Increased spacing */
+            border-radius: 50%;
+            animation: loading-bounce 1.4s infinite ease-in-out both;
+            /* Default color removed, will be set individually */
+        }
+
+        /* Specific dot colors */
+        .loading-dots span:nth-child(1) {
+            background-color: #D8BFD8;
+            /* Light Purple */
+            animation-delay: -0.32s;
+        }
+
+        .loading-dots span:nth-child(2) {
+            background-color: #FFDAB9;
+            /* Peach/Orange */
+            animation-delay: -0.16s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            background-color: #FFFACD;
+            /* Lemon Chiffon/Yellow */
+            /* animation-delay: 0s; /* Default delay */
+        }
+
+        @keyframes loading-bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1.0);
+            }
+        }
+
+        .constellation {
+            width: 360px;
+            /* Adjusted size */
+            height: auto;
+            opacity: 0.8;
+            margin-top: 20px;
+            /* Add some space at the top */
+            /* Removed margin-bottom, let flexbox handle spacing */
+        }
+
+        .loading-baby {
+            width: 150px;
+            /* Adjust size as needed */
+            height: auto;
+            margin: 20px 0;
+            /* Add vertical space */
+        }
+
+        /* Basic sparkle styling - add sparkle images/elements as needed */
+        .sparkle {
+            position: absolute;
+            /* Position sparkles around elements */
+            width: 15px;
+            height: 15px;
+            /* Add background-image for sparkle graphic */
+            /* Example positioning - adjust as needed */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading-container">
+        <img src="loading_constellation.svg" alt="Constellation" class="constellation">
+
+        <!-- <img src="sitting_smiling_baby.png" alt="Baby waving" class="loading-baby"> -->
+
+        <div class="loading-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div id="error-message" style="color: red; margin-top: 20px;"></div> <!-- Placeholder for error messages -->
+    </div>
+
+    <script>
+        const errorMessageDiv = document.getElementById('error-message');
+        const loadingDots = document.querySelector('.loading-dots');
+
+        // Function to fetch the story from the backend
+        async function generateStory() {
+            try {
+                // Replace '/generate-story' with your actual backend endpoint
+                // Use POST if you need to send data (like user choices) to the backend
+                const response = await fetch('/generate-story', {
+                    method: 'POST', // Or 'GET' if no data needs to be sent
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add other headers if needed, like Authorization
+                    },
+                    // Example body if using POST:
+                    // body: JSON.stringify({
+                    //   theme: sessionStorage.getItem('selectedTheme'), // Example: Retrieve theme from session storage
+                    //   characterName: sessionStorage.getItem('characterName') // Example: Retrieve name
+                    // })
+                });
+
+                if (!response.ok) {
+                    // Handle HTTP errors (e.g., 404, 500)
+                    const errorText = await response.text(); // Try to get error details from backend
+                    throw new Error(`HTTP error ${response.status}: ${errorText || 'Failed to fetch story'}`);
+                }
+
+                const result = await response.json(); // Assuming the backend sends JSON { story: "...", ... }
+
+                // --- Success ---
+                // loadingDots.style.display = 'none'; // Optionally hide dots on success before redirect
+
+                // Store the result (e.g., in sessionStorage) to be used on the next page
+                if (result && result.story) {
+                    sessionStorage.setItem('storyResult', JSON.stringify(result)); // Store the whole result object
+                    sessionStorage.setItem('generatedStory', result.story); // Or just the story text
+                } else {
+                    // Handle cases where response is ok, but data is missing/malformed
+                    throw new Error('Received incomplete story data from the server.');
+                }
+
+                // Redirect to the results page
+                window.location.href = 'results.html';
+
+            } catch (error) {
+                console.error('Error generating story:', error);
+
+                // --- Error Handling ---
+                // Hide loading dots on error
+                loadingDots.style.display = 'none';
+
+                // Display an error message to the user
+                errorMessageDiv.textContent = `Oops! Couldn't create the story. ${error.message}`;
+
+                // Optionally, redirect back or provide a retry mechanism
+                // setTimeout(() => { window.location.href = 'index.html'; }, 5000);
+            }
+        }
+
+        // Start the story generation process when the page loads
+        generateStory(); // Start fetching immediately
+
+    </script>
+</body>
+
+</html>

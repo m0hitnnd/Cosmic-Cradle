@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Cradle - Star Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1> <span class="sparkle-graphic">✨</span> Tell us about your star <span class="pencil">🖋️</span></h1>
+        </header>
+        <main class="form-page-main">
+            <div class="form-card">
+                <form id="star-details-form">
+                    <div class="form-group">
+                        <label for="baby-name">Baby's Name</label>
+                        <input type="text" id="baby-name" name="babyName" placeholder="Baby's Name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birth-date">Birth Date</label>
+                        <div class="input-with-icon">
+                            <input type="date" id="birth-date" name="birthDate" required>
+                            <i class="far fa-calendar-alt date-icon"></i> <!-- Calendar Icon -->
+                        </div>
+                    </div>
+
+
+                    <div class="form-group time-group">
+                        <label for="birth-time">Birth Time</label>
+                        <div class="time-input-container">
+                            <div class="input-with-icon time-select-wrapper">
+                                <input type="time" id="birth-time" name="birthTime" required>
+                                <!-- Using input type=time, can be styled or replaced -->
+                            </div>
+                            <button type="button" class="approximate-button" id="approximate-toggle-btn">
+                                Approximate <span class="toggle-indicator"></span>
+                            </button>
+                            <input type="checkbox" id="approximate-time" name="approximateTime" class="hidden-checkbox">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="birth-city">Birth City</label>
+                        <input type="text" id="birth-city" name="birthCity" placeholder="Birth City" required>
+                    </div>
+
+                    <button type="submit" class="cta-button">Generate Story</button>
+                </form>
+            </div>
+            <div class="illustration-container form-illustration">
+                <span class="sparkle-graphic">✨</span>
+                <img src="sitting_baby.png" alt="Sitting Baby Illustration">
+                <span class="sparkle-graphic">✨</span>
+            </div>
+        </main>
+    </div>
+    <script>
+        // Basic toggle functionality for the approximate button
+        const approxButton = document.getElementById('approximate-toggle-btn');
+        const approxCheckbox = document.getElementById('approximate-time');
+        if (approxButton && approxCheckbox) {
+            approxButton.addEventListener('click', () => {
+                approxCheckbox.checked = !approxCheckbox.checked;
+                approxButton.classList.toggle('active', approxCheckbox.checked);
+            });
+        }
+
+        // Handle form submission
+        const form = document.getElementById('star-details-form');
+        if (form) {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+                // In a real application, you would likely gather form data here
+                // and potentially send it before redirecting.
+                window.location.href = 'loading.html'; // Redirect to the loading page
+            });
+        }
+    </script>
+</body>
+
+</html>

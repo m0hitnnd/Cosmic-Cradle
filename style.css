@@ -1,31 +1,38 @@
 body {
     margin: 0;
-    font-family: sans-serif;
-    /* A default sans-serif font */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* Modern font stack */
     background-color: #FFF0DB;
-    /* Approximate background color from the image */
-    color: #001F54;
-    /* Dark blue text color */
+    /* Light beige background */
+    color: #333;
+    /* Default text color */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    /* Align to top */
     min-height: 100vh;
-    text-align: center;
+    padding-top: 3rem;
+    /* Add some padding at the top */
 }
 
 .container {
-    max-width: 600px;
+    max-width: 900px;
+    /* Wider container for side-by-side layout */
     padding: 20px;
+    width: 90%;
+    /* Responsive width */
 }
 
 header h1 {
     font-family: serif;
-    /* Using a serif font for the heading */
-    font-size: 2.8em;
-    /* Adjust size as needed */
-    margin-bottom: 0.5em;
-    color: #001F54;
-    /* Dark blue */
+    /* Keep serif for main heading */
+    font-size: 2.5em;
+    /* Slightly adjust size */
+    margin-bottom: 2em;
+    /* More space below heading */
+    color: #333;
+    /* Darker text color */
+    text-align: center;
 }
 
 header h1 .sparkle {
@@ -33,51 +40,326 @@ header h1 .sparkle {
     /* Gold color for the sparkle */
 }
 
+/* Remove paragraph style from index if not needed or adjust */
 header p {
     font-size: 1.1em;
-    color: #034078;
-    /* Slightly lighter blue */
+    color: #555;
     margin-bottom: 3em;
+    text-align: center;
 }
 
+/* General Illustration Styling */
 .illustration-container {
-    margin: 2em auto;
-    /* Center the container */
-    max-width: 400px;
-    /* Set a max-width for the image container */
-    width: 80%;
-    /* Allow it to shrink on smaller screens */
+    text-align: center;
+    position: relative;
+    /* For positioning sparkles */
 }
 
 .illustration-container img {
     display: block;
-    /* Prevent extra space below image */
     max-width: 100%;
-    /* Image scales down to fit container */
     height: auto;
-    /* Maintain aspect ratio */
     margin: 0 auto;
-    /* Center image if container is wider */
+}
+
+/* Homepage Specific Illustration */
+main:not(.form-page-main) .illustration-container {
+    margin: 2em auto;
+    max-width: 400px;
+    width: 80%;
 }
 
 footer {
     margin-top: 3em;
+    text-align: center;
 }
 
-.cta-button {
+/* --- Form Page Specific Styles --- */
+
+.form-page-main {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    /* Align items to the top */
+    gap: 3rem;
+    /* Space between form and illustration */
+    justify-content: center;
+}
+
+.form-card {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    flex: 1;
+    /* Allows the form card to take up space */
+    max-width: 450px;
+    /* Max width for the form */
+}
+
+#star-details-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    /* Space between form groups */
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    /* Space between label and input */
+}
+
+.form-group label {
+    font-weight: 500;
+    /* Medium weight */
+    color: #555;
+    /* Slightly lighter text */
+    font-size: 0.95rem;
+}
+
+/* Input base styles */
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="time"] {
+    padding: 0.8rem 1rem;
+    border: 1px solid #dcdcdc;
+    /* Light gray border */
+    border-radius: 8px;
+    background-color: #ffffff;
+    /* White background */
+    color: #333;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #6B9EFF;
+    /* Highlight with blue border on focus */
+}
+
+.form-group input::placeholder {
+    color: #aaa;
+}
+
+/* Styling for input with icon */
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon input {
+    padding-right: 2.8rem;
+    /* Make space for the icon */
+}
+
+.input-with-icon .date-icon,
+.input-with-icon .time-icon {
+    position: absolute;
+    right: 1rem;
+    color: #aaa;
+    font-size: 1.1rem;
+    pointer-events: none;
+    /* Don't interfere with input click */
+}
+
+/* Customizing date/time input appearance */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    /* Hide default browser icons */
+    position: absolute;
+    right: 0;
+    width: 30px;
+    /* Clickable area */
+    cursor: pointer;
+}
+
+/* Birth Time Group Specific Styles */
+.time-group .time-input-container {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.time-select-wrapper {
+    flex-grow: 1;
+    /* Time input takes available space */
+}
+
+/* Approximate Button Styles */
+.approximate-button {
+    padding: 0.8rem 1rem;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    color: #555;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    /* Prevent wrapping */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.approximate-button:hover {
+    border-color: #bbb;
+}
+
+.approximate-button.active {
+    border-color: #6B9EFF;
+    background-color: #e8f0ff;
+    /* Light blue background when active */
+    color: #4A7BDB;
+}
+
+.toggle-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ccc;
+    transition: background-color 0.2s ease;
+}
+
+.approximate-button.active .toggle-indicator {
     background-color: #6B9EFF;
-    /* Blue button color */
+    /* Blue indicator when active */
+}
+
+.hidden-checkbox {
+    display: none;
+    /* Hide the actual checkbox */
+}
+
+
+/* Form Page Illustration Styles */
+.form-illustration {
+    flex-basis: 300px;
+    /* Suggest a base width */
+    flex-shrink: 0;
+    /* Prevent shrinking too much */
+    display: flex;
+    flex-direction: column;
+    /* Stack sparkles and image */
+    align-items: center;
+    justify-content: center;
+    /* Center vertically */
+    padding-top: 2rem;
+    /* Align roughly with form start */
+}
+
+.form-illustration img {
+    max-width: 250px;
+    /* Control illustration size */
+    margin: 1rem 0;
+    /* Space around image */
+}
+
+/* Sparkle Graphics */
+.sparkle-graphic {
+    font-size: 1.5rem;
+    color: #FFD700;
+    /* Gold color */
+    opacity: 0.8;
+}
+
+.pencil {
+    font-size: 1.5rem;
+    /* Adjust size */
+    vertical-align: middle;
+    margin-left: 0.3em;
+}
+
+/* CTA Button (Homepage - original styling or adjust as needed) */
+.cta-link .cta-button {
+    background-color: #6B9EFF;
     color: white;
     border: none;
     padding: 15px 30px;
     font-size: 1.1em;
     border-radius: 25px;
-    /* Rounded corners */
     cursor: pointer;
     transition: background-color 0.3s ease;
+    /* Keep original width (auto) or set a specific width */
+    width: auto;
+    /* Or specify a width like 200px */
 }
 
-.cta-button:hover {
+.cta-link .cta-button:hover {
+    background-color: #4A7BDB;
+}
+
+/* CTA Button (Form Submit) */
+#star-details-form .cta-button {
+    background-color: #6B9EFF;
+    /* New blue color */
+    color: white;
+    border: none;
+    padding: 0.9rem 1.5rem;
+    /* Adjust padding */
+    font-size: 1.05rem;
+    /* Slightly smaller */
+    font-weight: 500;
+    border-radius: 8px;
+    /* Less rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    /* Make button full width */
+    margin-top: 1rem;
+    /* Space above button */
+}
+
+#star-details-form .cta-button:hover {
     background-color: #4A7BDB;
     /* Darker blue on hover */
+}
+
+/* Hide original form styles if conflicting */
+.form-group.inline-group,
+.date-input,
+.time-input,
+.time-input-wrapper,
+.approximate-toggle,
+#star-details-form+.illustration-container {
+    display: none;
+    /* Hide old elements/selectors */
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .form-page-main {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-card {
+        max-width: 100%;
+        /* Allow form to take full width */
+        padding: 1.5rem;
+    }
+
+    .form-illustration {
+        flex-basis: auto;
+        /* Remove fixed basis */
+        padding-top: 0;
+        margin-top: 2rem;
+    }
+
+    .form-illustration img {
+        max-width: 200px;
+    }
+
+    header h1 {
+        font-size: 2em;
+    }
 }
