@@ -131,19 +131,36 @@
         // Function to fetch the story from the backend
         async function generateStory() {
             try {
+                // --- Retrieve data from Session Storage ---
+                const babyName = sessionStorage.getItem('babyName');
+                const birthDate = sessionStorage.getItem('birthDate');
+                const birthTime = sessionStorage.getItem('birthTime');
+                const birthCity = sessionStorage.getItem('birthCity');
+                const approximateTime = sessionStorage.getItem('approximateTime') === 'true'; // Convert back to boolean
+
+                // --- Basic validation (optional but recommended) ---
+                if (!babyName || !birthDate || !birthTime || !birthCity) {
+                    throw new Error("Missing required information. Please go back and fill out the form completely.");
+                }
+
+                // --- Prepare data payload ---
+                const storyRequestData = {
+                    babyName,
+                    birthDate,
+                    birthTime,
+                    birthCity,
+                    approximateTime
+                };
+
                 // Replace '/generate-story' with your actual backend endpoint
-                // Use POST if you need to send data (like user choices) to the backend
                 const response = await fetch('/generate-story', {
-                    method: 'POST', // Or 'GET' if no data needs to be sent
+                    method: 'POST', // Ensure method is POST
                     headers: {
                         'Content-Type': 'application/json',
                         // Add other headers if needed, like Authorization
                     },
-                    // Example body if using POST:
-                    // body: JSON.stringify({
-                    //   theme: sessionStorage.getItem('selectedTheme'), // Example: Retrieve theme from session storage
-                    //   characterName: sessionStorage.getItem('characterName') // Example: Retrieve name
-                    // })
+                    // --- Send retrieved data in the request body ---
+                    body: JSON.stringify(storyRequestData)
                 });
 
                 if (!response.ok) {
@@ -158,34 +175,45 @@
                 // loadingDots.style.display = 'none'; // Optionally hide dots on success before redirect
 
                 // Store the result (e.g., in sessionStorage) to be used on the next page
-                if (result && result.story) {
-                    sessionStorage.setItem('storyResult', JSON.stringify(result)); // Store the whole result object
-                    sessionStorage.setItem('generatedStory', result.story); // Or just the story text
+                if (result) { // Assuming result contains the necessary story data
+                    // Store the entire result object from the backend
+                    sessionStorage.setItem('storyResult', JSON.stringify(result));
+
+                    // **Optional: Store specific parts if needed by story.html directly**
+                    // if (result.story) {
+                    //     sessionStorage.setItem('generatedStory', result.story);
+                    // }
+                    // if (result.zodiac) {
+                    //     sessionStorage.setItem('zodiacInfo', JSON.stringify(result.zodiac));
+                    // }
+                    // ... etc for other sections
                 } else {
                     // Handle cases where response is ok, but data is missing/malformed
                     throw new Error('Received incomplete story data from the server.');
                 }
 
                 // Redirect to the results page
-                window.location.href = 'results.html';
+                window.location.href = 'story.html'; // Redirect to story.html now
 
             } catch (error) {
                 console.error('Error generating story:', error);
 
                 // --- Error Handling ---
                 // Hide loading dots on error
-                loadingDots.style.display = 'none';
+                if (loadingDots) {
+                    loadingDots.style.display = 'none';
+                }
 
                 // Display an error message to the user
                 errorMessageDiv.textContent = `Oops! Couldn't create the story. ${error.message}`;
 
-                // Optionally, redirect back or provide a retry mechanism
-                // setTimeout(() => { window.location.href = 'index.html'; }, 5000);
+                // Optionally, add a button to go back
+                // errorMessageDiv.innerHTML += '<br><button onclick="window.history.back()">Go Back</button>';
             }
         }
 
         // Start the story generation process when the page loads
-        generateStory(); // Start fetching immediately
+        generateStory();
 
     </script>
 </body>
