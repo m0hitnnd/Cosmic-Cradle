@@ -1,0 +1,10 @@
+{
+    "rules": [
+        {
+            "instruction": "Do not add comments that are obvious from the code itself. Comments should explain the 'why', not the 'what', unless the code is particularly complex."
+        },
+        {
+            "instruction": "When modifying code, review any nearby existing comments. If a comment is no longer accurate or relevant after the code change, remove or update it."
+        }
+    ]
+}
