@@ -78,8 +78,22 @@
         if (form) {
             form.addEventListener('submit', function (event) {
                 event.preventDefault(); // Prevent the default form submission
-                // In a real application, you would likely gather form data here
-                // and potentially send it before redirecting.
+
+                // --- Collect Form Data ---
+                const babyName = document.getElementById('baby-name').value;
+                const birthDate = document.getElementById('birth-date').value;
+                const birthTime = document.getElementById('birth-time').value;
+                const birthCity = document.getElementById('birth-city').value;
+                const approximateTime = document.getElementById('approximate-time').checked;
+
+                // --- Save to Session Storage ---
+                sessionStorage.setItem('babyName', babyName);
+                sessionStorage.setItem('birthDate', birthDate);
+                sessionStorage.setItem('birthTime', birthTime);
+                sessionStorage.setItem('birthCity', birthCity);
+                sessionStorage.setItem('approximateTime', approximateTime.toString()); // Store as string
+
+                // --- Redirect ---
                 window.location.href = 'loading.html'; // Redirect to the loading page
             });
         }
