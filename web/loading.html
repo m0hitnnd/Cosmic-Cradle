@@ -130,6 +130,7 @@
 
         // Function to fetch the story from the backend
         async function generateStory() {
+            console.log('generateStory function started.'); // <-- Log 1: Function start
             try {
                 // --- Retrieve data from Session Storage ---
                 const babyName = sessionStorage.getItem('babyName');
@@ -152,8 +153,10 @@
                     approximateTime
                 };
 
+                console.log('Attempting to fetch story with data:', storyRequestData); // <-- Log 2: Before fetch
+
                 // Replace '/generate-story' with your actual backend endpoint
-                const response = await fetch('/generate-story', {
+                const response = await fetch('http://localhost:3000/generate-story', {
                     method: 'POST', // Ensure method is POST
                     headers: {
                         'Content-Type': 'application/json',
@@ -196,7 +199,7 @@
                 window.location.href = 'story.html'; // Redirect to story.html now
 
             } catch (error) {
-                console.error('Error generating story:', error);
+                console.error('Error in generateStory fetch/processing:', error); // <-- Log 3: In catch block
 
                 // --- Error Handling ---
                 // Hide loading dots on error
